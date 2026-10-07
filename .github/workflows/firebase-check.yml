@@ -14,5 +14,4 @@ jobs:
         with:
           node-version: '22'
       - run: node --test scripts/hosting.test.mjs
-      - run: node --check scripts/check-no-billing.mjs
       - run: node --check scripts/verify-deployment.mjs
