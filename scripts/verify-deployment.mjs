@@ -1,4 +1,4 @@
-const base = process.argv[2] || 'https://digifluxos.web.app';
+const base = process.argv[2] || 'https://digifluxos-agentic.web.app';
 for (let attempt = 1; attempt <= 6; attempt++) {
   try {
     const res = await fetch(base, { signal: AbortSignal.timeout(15000) });
