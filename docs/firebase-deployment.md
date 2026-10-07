@@ -1,31 +1,20 @@
-# Firebase Hosting deployment
+# Official application deployment
+
+The public application is maintained in:
+https://github.com/hachichafamily333-prog/-digiflux-client-os
 
 Official URL: https://digifluxos-agentic.web.app
-Project: digifluxos
+Firebase project: digifluxos
 Hosting site: digifluxos-agentic
+Build output: apps/web/dist
 
-## User constraint
-No billing activation. Keep the Firebase project on the no-cost Spark plan.
-Spark is quota-limited. Its current plan must be confirmed in Firebase Console;
-this workflow does not inspect or change billing.
+This core repository contains a placeholder public/index.html, not the application.
+Its automatic public deployment is disabled to avoid overwriting the official site.
+Do not deploy the core placeholder to digifluxos-agentic.
 
-## Pipeline
-Push approved final changes to master -> GitHub Actions tests -> Google service-account authentication -> deploy Hosting only -> check the official public page.
+Develop application changes in -digiflux-client-os, run pnpm verify, and integrate
+final versions into its main branch. Its firebase-hosting workflow builds and
+deploys Hosting only using FIREBASE_SERVICE_ACCOUNT_DIGIFLUXOS.
 
-The GitHub Actions secret is FIREBASE_SERVICE_ACCOUNT_DIGIFLUXOS.
-Cloud Billing API is not used and does not need to be enabled.
-The workflow does not deploy Functions, Cloud Run, App Hosting, Storage, databases or AI features.
-No backend has been implemented.
-
-## Status before this change
-Repository authentication succeeded using the newly configured secret.
-The previously added optional billing check blocked on SERVICE_DISABLED.
-That check has been removed at the user's request.
-A successful Hosting deployment and public verification are still required.
-
-## Commands
-node --test scripts/hosting.test.mjs
-firebase deploy --project digifluxos --only hosting --non-interactive
-node scripts/verify-deployment.mjs https://digifluxos-agentic.web.app
-
-Pricing reference: https://firebase.google.com/docs/projects/billing/firebase-pricing-plans
+Keep Firebase on Spark for no billing, within free quotas.
+No Cloud Billing API activation is required.
