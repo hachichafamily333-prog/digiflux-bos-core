@@ -1,0 +1,17 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for DigiFlux Agentic OS",
+  "scripts": {
+    "lint": "echo 'No linting configured yet'",
+    "build": "echo 'Build complete'"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "private": true
+}
