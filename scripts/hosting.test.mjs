@@ -5,6 +5,7 @@ const config = JSON.parse(readFileSync(new URL('../firebase.json', import.meta.u
 test('deployment configuration enables only static Hosting', () => {
   assert.deepEqual(Object.keys(config), ['hosting']);
   assert.equal(config.hosting.public, 'public');
+  assert.equal(config.hosting.site, 'digifluxos-agentic');
   assert.equal(config.hosting.rewrites.some(r => r.function || r.run), false);
 });
 test('deployment checks billing before deploying Hosting only', () => {
