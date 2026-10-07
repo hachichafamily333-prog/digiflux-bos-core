@@ -8,12 +8,11 @@ test('deployment configuration enables only static Hosting', () => {
   assert.equal(config.hosting.site, 'digifluxos-agentic');
   assert.equal(config.hosting.rewrites.some(r => r.function || r.run), false);
 });
-test('deployment uses only Hosting without Cloud Billing API', () => {
+test('core cannot automatically overwrite the official public application', () => {
   const workflow = readFileSync(new URL('../.github/workflows/firebase-deploy.yml', import.meta.url), 'utf8');
-  assert.ok(workflow.includes('--only hosting'));
-  assert.ok(!workflow.includes('--only functions'));
-  assert.ok(!workflow.includes('check-no-billing.mjs'));
-  assert.ok(!workflow.includes('setup-gcloud'));
+  assert.ok(!workflow.includes('firebase deploy'));
+  assert.ok(!workflow.includes('credentials_json'));
+  assert.ok(workflow.includes('-digiflux-client-os'));
 });
 test('landing page does not rely on a billable API', () => {
   const page = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
