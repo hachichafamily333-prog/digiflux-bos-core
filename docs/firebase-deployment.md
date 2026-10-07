@@ -21,7 +21,8 @@ Verify project billing (Blaze), API enablement, deployer IAM permissions, runtim
 - Existing /api/health returned HTTP 404.
 - Three local tests passed (export / region mapping, JSON health, rejected unknown routes and writes).
 - Existing GitHub deployment failed because FIREBASE_TOKEN was empty.
-- Local Firebase project authentication did not succeed with the supplied service account. This does not establish whether its IAM privileges or billing are correct.
+- Direct Google OAuth authentication rejected the supplied service-account key: HTTP 400, invalid_grant, Invalid JWT Signature. Replace the key before deploying. Its IAM privileges and billing remain unverified.
+- GitHub Actions Firebase checks succeeded on Node.js 22, including npm ci, syntax validation, and all three tests.
 
 ## Release gate
 After configuring authentication and merging:
