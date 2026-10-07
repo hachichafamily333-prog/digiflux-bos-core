@@ -9,6 +9,11 @@ User requirement: remain on the free Spark plan; no billing activation or pay-as
 - Firestore and email/password or Google sign-in may be considered later within Spark quotas, with appropriate security rules.
 - No paid AI calls or SMS authentication without revisiting the user's requirement.
 
+## Official public site
+URL: https://digifluxos-agentic.web.app
+Hosting site ID: digifluxos-agentic (explicitly selected in firebase.json).
+Expected Firebase project: digifluxos; site membership and deploy permissions remain to be verified with valid credentials.
+
 ## Deployment
 Actions uses FIREBASE_SERVICE_ACCOUNT_DIGIFLUXOS, then checks Google Cloud project billingInfo.
 Deployment fails if billingEnabled is true, the response is ambiguous, or the service account cannot verify it.
