@@ -28,4 +28,4 @@ jobs:
       - name: Deploy Hosting only
         run: firebase deploy --project digifluxos --only hosting --non-interactive
       - name: Verify deployed Hosting
-        run: node scripts/verify-deployment.mjs https://digifluxos.web.app
+        run: node scripts/verify-deployment.mjs https://digifluxos-agentic.web.app
