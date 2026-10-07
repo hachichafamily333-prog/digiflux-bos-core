@@ -1,0 +1,18 @@
+name: Firebase Spark checks
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/hosting.test.mjs
+      - run: node --check scripts/check-no-billing.mjs
+      - run: node --check scripts/verify-deployment.mjs
