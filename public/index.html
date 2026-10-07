@@ -16,13 +16,9 @@
   <div class="card">
     <h1>DigiFlux Agentic OS</h1>
     <p>Le Business Operating System connecté à GitHub, Firebase et Google Workspace pour piloter l'entreprise en toute autonomie.</p>
-    <div class="badge">Socle DigiFlux — vérification API en cours</div>
+    <div class="badge">Socle DigiFlux — hébergement statique</div>
   </div>
-<script>
-fetch('/api/health').then(r => { if (!r.ok) throw new Error(); return r.json(); })
-.then(data => { document.querySelector('.badge').textContent = data.status === 'online' ? 'API Firebase opérationnelle' : 'API à vérifier'; })
-.catch(() => { document.querySelector('.badge').textContent = 'API Firebase non disponible'; });
-</script>
+
 </body>
 </html>
 

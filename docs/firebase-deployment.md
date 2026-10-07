@@ -1,43 +1,31 @@
-# Firebase deployment readiness
+# Firebase: no-billing foundation
 
-Target project: `digifluxos`. Default branch: `master`.
+User requirement: remain on the free Spark plan; no billing activation or pay-as-you-go services.
 
-## Corrected foundation
-- Node.js 22 for Functions and CI.
-- Exported public health function `api`, with matching Hosting rewrite and explicit us-central1 region.
-- Locked dependencies and reproducible npm ci.
-- Pull-request tests; production deploys API before Hosting, then verifies live endpoints.
-- Runtime cap: two instances, zero minimum instances.
-- Hosting status reflects the health endpoint.
-- Authentication uses Application Default Credentials via google-github-actions/auth.
+## Current architecture
+- Firebase Hosting only, serving public/.
+- No Cloud Functions, Cloud Run, App Hosting, or Cloud Storage deployment.
+- No business backend has been implemented.
+- Firestore and email/password or Google sign-in may be considered later within Spark quotas, with appropriate security rules.
+- No paid AI calls or SMS authentication without revisiting the user's requirement.
 
-## Required Google / GitHub configuration
-Create the repository Actions secret `FIREBASE_SERVICE_ACCOUNT_DIGIFLUXOS` with the service-account JSON for this project. Do not commit it. Prefer migrating to Workload Identity Federation once the deployment service account and Google IAM configuration can be administered.
+## Deployment
+Actions uses FIREBASE_SERVICE_ACCOUNT_DIGIFLUXOS, then checks Google Cloud project billingInfo.
+Deployment fails if billingEnabled is true, the response is ambiguous, or the service account cannot verify it.
+The account needs permission to read project billing info as well as deploy Hosting.
+It deploys only Hosting and checks the live page. It never enables billing.
 
-Verify project billing (Blaze), API enablement, deployer IAM permissions, runtime service account permissions, and public invocation permission for this health endpoint. Do not add business data to the public health route. Add Firebase Auth and authorization before business endpoints; define and test Firestore/Storage rules when those services are introduced.
+## Remaining blocker
+Google rejected the supplied key with invalid_grant / Invalid JWT Signature.
+Configure a valid service-account key in the GitHub Actions secret.
+The project's current billing status remains unverified. Keep the project on Spark.
+Any already-enabled paid resources must be inspected separately; this change does not delete existing cloud resources.
 
-## Verification on 2026-10-07
-- Existing Hosting root returned HTTP 200.
-- Existing /api/health returned HTTP 404.
-- Three local tests passed (export / region mapping, JSON health, rejected unknown routes and writes).
-- Existing GitHub deployment failed because FIREBASE_TOKEN was empty.
-- Direct Google OAuth authentication rejected the supplied service-account key: HTTP 400, invalid_grant, Invalid JWT Signature. Replace the key before deploying. Its IAM privileges and billing remain unverified.
-- GitHub Actions Firebase checks succeeded on Node.js 22, including npm ci, syntax validation, and all three tests.
+## Free service limits
+Spark has quotas; free does not mean unlimited. At limits, services may stop instead of charging.
+See https://firebase.google.com/pricing and https://firebase.google.com/docs/projects/billing/firebase-pricing-plans .
 
-## Release gate
-After configuring authentication and merging:
-1. GitHub Firebase checks succeed.
-2. Production deploy succeeds for Functions and Hosting.
-3. Post-deploy Hosting and API checks succeed.
-4. Verify billing and IAM in Firebase / Google Cloud.
-Until these pass, readiness is pending. The repository is a foundation, not the implemented business application.
-
-## Commands
-```sh
-npm ci --prefix functions
-npm run build --prefix functions
-npm test --prefix functions
-firebase deploy --project digifluxos --only functions:api --non-interactive
-firebase deploy --project digifluxos --only hosting --non-interactive
-node scripts/verify-deployment.mjs https://digifluxos.web.app
-```
+## Checks
+node --test scripts/hosting.test.mjs
+node --check scripts/check-no-billing.mjs
+node --check scripts/verify-deployment.mjs

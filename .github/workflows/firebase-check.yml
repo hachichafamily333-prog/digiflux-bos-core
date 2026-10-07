@@ -1,4 +1,4 @@
-name: Firebase checks
+name: Firebase Spark checks
 on:
   pull_request:
   push:
@@ -13,8 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: functions/package-lock.json
-      - run: npm ci --prefix functions
-      - run: npm run build --prefix functions
-      - run: npm test --prefix functions
+      - run: node --test scripts/hosting.test.mjs
+      - run: node --check scripts/check-no-billing.mjs
+      - run: node --check scripts/verify-deployment.mjs
